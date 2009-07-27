@@ -1,0 +1,48 @@
+#!/sbin/runscript
+# Copyright 2009 Funtoo Technologies, LLC
+# All rights reserved. Released under the 2-clause BSD license.
+
+IP=192.168.0.10
+NET=192.168.0.0
+NM=255.255.255.0
+GW=192.168.0.1
+INT=br0
+SLAVE=eth0
+DOM=example.org
+NS1=a.b.c.d
+NS2=e.f.g.h
+
+depend() {
+	provide net
+	after net.lo 
+	need net.$SLAVE
+	after vz
+}
+
+ezroute() {
+	[ "$1" = "add" ] && ebegin "Adding routes for $INT" || ebegin "Deleting routes for $INT"
+	route $1 -net $NET netmask $NM $INT
+	route $1 default gw $GW 
+	eend $? && return $?
+}
+
+start() {
+	ebegin "Bringing up bridge $INT"
+
+	# Note: we set the forwarding delay to zero below. If you are using STP, you should
+	# delete this option and enable STP instead.
+
+	brctl addbr $INT && \
+	brctl addif $INT $SLAVE && \
+	brctl setfd $INT 0 && \
+	ifconfig $INT up
+	eend $?
+}
+
+stop() {
+	ebegin "Shuttind down bridge $INT"
+	ifconfig $INT down && \
+	brctl delbr $INT 
+	eend $?
+}
+

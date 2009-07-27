@@ -1,0 +1,23 @@
+#!/sbin/runscript
+# Copyright 2009 Funtoo Technologies, LLC
+# All rights reserved. Released under the 2-clause BSD license.
+
+INT=eth0
+
+depend() {
+	provide net
+	after net.lo
+}
+
+start() {
+	ebegin "Bringing up network interface $INT"
+	ifconfig $INT 0.0.0.0 up
+	eend $?
+}
+
+stop() {
+	ebegin "Shutting down network interface $INT"
+	ifconfig $INT down
+	eend $?
+}
+
