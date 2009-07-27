@@ -35,12 +35,20 @@ start() {
 	brctl addbr $INT && \
 	brctl addif $INT $SLAVE && \
 	brctl setfd $INT 0 && \
-	ifconfig $INT up
+	ifconfig $INT up && \
+	ezroute add && \
+        resolvconf -a $INT << EOF
+domain $DOM
+nameserver $NS1
+nameserver $NS2
+EOF
 	eend $?
 }
 
 stop() {
 	ebegin "Shutting down bridge $INT"
+	resolvconf -d $INT && \
+	ezroute del && \
 	ifconfig $INT down && \
 	brctl delbr $INT 
 	eend $?
