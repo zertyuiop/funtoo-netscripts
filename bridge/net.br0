@@ -40,7 +40,7 @@ start() {
 }
 
 stop() {
-	ebegin "Shuttind down bridge $INT"
+	ebegin "Shutting down bridge $INT"
 	ifconfig $INT down && \
 	brctl delbr $INT 
 	eend $?
