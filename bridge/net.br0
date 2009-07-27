@@ -14,9 +14,8 @@ NS2=e.f.g.h
 
 depend() {
 	provide net
-	after net.lo 
+	after net.lo vz
 	need net.$SLAVE
-	after vz
 }
 
 ezroute() {
