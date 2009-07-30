@@ -1,0 +1,4 @@
+This network configuration shows how you might create a network bond device,
+bond0, which consists of the slaves eth0 and eth1. A publicly-routeable IP
+address is assigned to bond0, and route and DNS information is also configured
+for bond0.

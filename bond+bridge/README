@@ -1,0 +1,8 @@
+This example shows how you might configure a fast 2Gbps intra-server link.
+eth4 and eth5 (let's assume this is an Intel PCI Express dual-port gigabit
+adapter) are bonded, creating the "bond0" device, which is then added to the
+br1 bridge. The br1 bridge is configured with an non-routeable IP. No DNS
+information is associated with this network connection, so there is no call to
+resolvconf. Other network devices, such as OpenVZ or Xen virtual ethernet
+devices, can be added to the bridge as well. The MTU for all interfaces is
+set to 9000 bytes.

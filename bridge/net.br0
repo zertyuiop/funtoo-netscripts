@@ -7,7 +7,7 @@ NET=192.168.0.0
 NM=255.255.255.0
 GW=192.168.0.1
 INT=br0
-SLAVE=eth0
+SLAVES="eth0"
 DOM=example.org
 NS1=a.b.c.d
 NS2=e.f.g.h
@@ -15,7 +15,10 @@ NS2=e.f.g.h
 depend() {
 	provide net
 	after net.lo vz
-	need net.$SLAVE
+	for SLAVE in $SLAVES
+	do
+		need net.$SLAVE
+	done
 }
 
 ezroute() {
@@ -32,7 +35,10 @@ start() {
 	# delete this option and enable STP instead.
 
 	brctl addbr $INT && \
-	brctl addif $INT $SLAVE && \
+	for SLAVE in $SLAVES
+	do
+		brctl addif $INT $SLAVE || eend $?
+	done && \
 	brctl setfd $INT 0 && \
 	ifconfig $INT up && \
 	ezroute add && \

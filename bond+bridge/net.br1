@@ -1,0 +1,33 @@
+#!/sbin/runscript
+# Copyright 2009 Funtoo Technologies, LLC
+# All rights reserved. Released under the 2-clause BSD license.
+
+INT=br1
+IP=172.30.0.1
+NM=255.255.0.0
+INT="$INT"
+SLAVE=bond0
+
+depend() {
+        provide net
+        need net.$SLAVE
+        after net.lo vz
+}
+
+start() {
+        ebegin "Bringing up bridge $INT"
+        brctl addbr $INT && \
+        brctl addif $INT $SLAVE && \
+        brctl setfd $INT 0 && \
+        ifconfig $INT $IP netmask $NM up && \
+        ifconfig $INT mtu 9000
+        eend $?
+}
+
+stop() {
+        ebegin "Shutting down bridge $INT"
+        ifconfig $INT down && \
+        brctl delbr $INT
+        eend $?
+}
+

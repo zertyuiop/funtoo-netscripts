@@ -1,0 +1,31 @@
+#!/sbin/runscript
+# Copyright 2009 Funtoo Technologies, LLC
+# All rights reserved. Released under the 2-clause BSD license.
+
+INT="bond0"
+SLAVES="eth4 eth5"
+
+depend() {
+        provide net
+        need net.lo
+}
+
+start() {
+        ebegin "Bringing up bond $INT"
+        ifconfig $INT 0.0.0.0 up && \
+        ifconfig $INT mtu 9000 && \
+        for SLAVE in $SLAVES
+        do
+                ifconfig $SLAVE mtu 9000 || eend $? 
+        done && \
+        ifenslave $INT $SLAVES
+        eend $?
+}
+
+stop() {
+        ebegin "Shutting down bond $INT"
+        ifconfig $INT down && \
+        ifenslave -d $INT $SLAVES
+        eend $?
+}
+
