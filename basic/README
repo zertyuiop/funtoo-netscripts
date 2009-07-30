@@ -1,0 +1,7 @@
+This is the template most people will want to use.
+
+This shows how you might configure a network interface, such as eth0, with
+static IP, route and DNS information. 
+
+You might use it on a home server if you are not using DHCP. Or you might
+use something like this at a datacenter.
