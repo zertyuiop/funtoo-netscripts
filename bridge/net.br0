@@ -40,7 +40,7 @@ start() {
 		brctl addif $INT $SLAVE || eend $?
 	done && \
 	brctl setfd $INT 0 && \
-	ifconfig $INT up && \
+	ifconfig $INT $IP netmask $NM up && \
 	ezroute add && \
         resolvconf -a $INT << EOF
 domain $DOM
