@@ -5,11 +5,6 @@
 INT="bond0"
 SLAVES="eth4 eth5"
 
-depend() {
-        provide net
-        need net.lo
-}
-
 start() {
         ebegin "Bringing up bond $INT"
         ifconfig $INT 0.0.0.0 up && \

@@ -3,7 +3,8 @@ eth4 and eth5 (let's assume this is an Intel PCI Express dual-port gigabit
 adapter) are bonded, creating the "bond0" device, which is then added to the
 br1 bridge. The br1 bridge is configured with an non-routeable IP. No DNS
 information is associated with this network connection, so there is no call to
-resolvconf.
+resolvconf. (If you need to set up name servers, copy resolvconf lines from
+interfaces/basic/netif.eth0.)
 
 We do not need to explicitly create a route for the network, since a network
 route will be automatically created for br1 when we assign an IP address to it
@@ -11,3 +12,7 @@ route will be automatically created for br1 when we assign an IP address to it
 
 Other network devices, such as OpenVZ or Xen virtual ethernet devices, can be
 added to the bridge as well. The MTU for all interfaces is set to 9000 bytes.
+
+Note that the br1 bridge will use the lesser of all child interface MTUs as
+its MTU, so if you want the bridge to have a 9000 MTU, make sure all child
+devices added to the bridge have an MTU of 9000.

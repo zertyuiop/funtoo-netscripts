@@ -4,11 +4,6 @@
 
 INT=eth0
 
-depend() {
-	provide net
-	after net.lo
-}
-
 start() {
 	ebegin "Bringing up network interface $INT"
 	ifconfig $INT 0.0.0.0 up

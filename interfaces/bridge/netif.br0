@@ -13,11 +13,9 @@ NS1=a.b.c.d
 NS2=e.f.g.h
 
 depend() {
-	provide net
-	after net.lo vz
 	for SLAVE in $SLAVES
 	do
-		need net.$SLAVE
+		need netif.$SLAVE
 	done
 }
 

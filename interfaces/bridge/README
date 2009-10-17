@@ -2,4 +2,5 @@ This network configuration shows how you might create a bridge, and assign a
 routeable IP address to it. Then, you would add eth0 to the bridge. Other
 interfaces, such as OpenVZ or Xen virtual ethernet devices, could be added to
 the bridge as well, allowing them to access the Internet. This can be done
-dynamically by typing "brctl addif br0 veth100.0", for example.
+dynamically by typing "brctl addif br0 veth100.0", for example, in the case
+of OpenVZ with "veth" virtual interfaces.

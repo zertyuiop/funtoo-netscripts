@@ -2,24 +2,21 @@
 # Copyright 2009 Funtoo Technologies, LLC
 # All rights reserved. Released under the 2-clause BSD license.
 
+INT="bond0"
+SLAVES="eth0 eth1"
 IP=192.168.0.10
 NM=255.255.255.0
 GW=192.168.0.1
-INT=eth0
 DOM=example.org
 NS1=a.b.c.d
 NS2=e.f.g.h
 
-depend() {
-        provide net
-        after net.lo
-}
-
 start() {
-        ebegin "Bringing up network interface $INT"
+        ebegin "Bringing up bond $INT"
         ifconfig $INT $IP netmask $NM up && \
         route add default gw $GW $INT && \
-        resolvconf -a $INT << EOF
+        ifenslave $INT $SLAVES && \
+	resolvconf -a $INT << EOF
 domain $DOM
 nameserver $NS1
 nameserver $NS2
@@ -28,9 +25,11 @@ EOF
 }
 
 stop() {
-        ebegin "Shutting down network interface $INT"
-        resolvconf -d $INT && \
-        route del default gw $GW $INT && \
-        ifconfig $INT down
+        ebegin "Shutting down bond $INT"
+	resolvconf -d $INT && \
+	route del default gw $GW $INT && \
+        ifconfig $INT down && \
+        ifenslave -d $INT $SLAVES
         eend $?
 }
+

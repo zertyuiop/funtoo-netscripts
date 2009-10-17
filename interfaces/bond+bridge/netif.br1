@@ -9,9 +9,7 @@ INT="$INT"
 SLAVE=bond0
 
 depend() {
-        provide net
-        need net.$SLAVE
-        after net.lo vz
+        need netif.$SLAVE
 }
 
 start() {
